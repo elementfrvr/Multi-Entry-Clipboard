@@ -12,8 +12,6 @@ HWND hwnd;
 const string FilePath = "C:/Users/koda1/Desktop/Payload.txt";
 
 vector<string> FillVector(string currLine, vector<string> vectorBuffer){
-    // fill vector using string from string builder
-    //vector<string> clipboard = {null, null, null};
     vectorBuffer.push_back(currLine);
     return vectorBuffer;
 }
@@ -41,23 +39,27 @@ void print(std::vector<string> const &input)
 
 
 int main( int argc, char *argv[] ){
-    int count = 1;
+    int count = 0;
     vector<string> vectorList;
     string currLine;
     ifstream fileIn;
     fileIn.open(FilePath);
     if(!fileIn) 
         {
-            cout<<"Error opening output file"<<endl;
+            cout<<"Error opening input file"<<endl;
             system("pause");
             return -1;
         }
     while(!fileIn.eof()){
         getline(fileIn, currLine);
         vectorList = FillVector(currLine,vectorList);
-        PopulateClipboard(currLine);
+        //For testing clipboard
+        //PopulateClipboard(currLine);
         count++;
     }
+    //Output testing
+    currLine = vectorList[0];
     print(vectorList);
+    cout<<currLine;
     return 0;
 }
