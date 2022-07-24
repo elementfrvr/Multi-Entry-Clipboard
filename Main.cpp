@@ -36,30 +36,32 @@ void print(std::vector<string> const &input)
         std::cout << input.at(i) << ' ';
     }
 }
-
-
-int main( int argc, char *argv[] ){
-    int count = 0;
-    vector<string> vectorList;
+ifstream getFile(string Path, vector<string> vectorList){
     string currLine;
     ifstream fileIn;
-    fileIn.open(FilePath);
+    fileIn.open(Path);
     if(!fileIn) 
         {
             cout<<"Error opening input file"<<endl;
             system("pause");
-            return -1;
         }
     while(!fileIn.eof()){
         getline(fileIn, currLine);
         vectorList = FillVector(currLine,vectorList);
         //For testing clipboard
         //PopulateClipboard(currLine);
-        count++;
     }
+    
     //Output testing
-    currLine = vectorList[0];
-    print(vectorList);
-    cout<<currLine;
+    //currLine = vectorList[0];
+    //print(vectorList);
+    //cout<<currLine;
+}
+
+int main( int argc, char *argv[] ){
+    vector<string> vectorList;
+    getFile(FilePath, vectorList);
+    
+    
     return 0;
 }
