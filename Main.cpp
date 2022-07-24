@@ -4,18 +4,32 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <windows.h>
 using namespace std;
+HWND hwnd;
+
 
 const string FilePath = "C:/Users/koda1/Desktop/Payload.txt";
 
-
-
-vector<string> FillVector(string currItem, vector<string> vectorBuffer){
+vector<string> FillVector(string currLine, vector<string> vectorBuffer){
     // fill vector using string from string builder
     //vector<string> clipboard = {null, null, null};
-    vectorBuffer.push_back(currItem);
+    vectorBuffer.push_back(currLine);
     return vectorBuffer;
 }
+
+void PopulateClipboard(string currItem){
+    const char* output = currItem.c_str();
+    const size_t len = strlen(output) + 1;
+    HGLOBAL hMem =  GlobalAlloc(GMEM_MOVEABLE, len);
+    memcpy(GlobalLock(hMem), output, len);
+    GlobalUnlock(hMem);
+    OpenClipboard(0);
+    EmptyClipboard();
+    SetClipboardData(CF_TEXT, hMem);
+    CloseClipboard();
+}
+
 
 //For testing vector
 void print(std::vector<string> const &input)
@@ -29,7 +43,7 @@ void print(std::vector<string> const &input)
 int main( int argc, char *argv[] ){
     int count = 1;
     vector<string> vectorList;
-    string currItem;
+    string currLine;
     ifstream fileIn;
     fileIn.open(FilePath);
     if(!fileIn) 
@@ -39,9 +53,11 @@ int main( int argc, char *argv[] ){
             return -1;
         }
     while(!fileIn.eof()){
-        getline(fileIn, currItem);
-        vectorList = FillVector(currItem,vectorList);
+        getline(fileIn, currLine);
+        vectorList = FillVector(currLine,vectorList);
+        PopulateClipboard(currLine);
         count++;
     }
-    //print(vectorList);
+    print(vectorList);
+    return 0;
 }
